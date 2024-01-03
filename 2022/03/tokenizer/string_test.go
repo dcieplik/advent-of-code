@@ -11,14 +11,14 @@ func TestFindDuplicateChars(t *testing.T) {
 	testCases := map[string]struct {
 		s1, s2, want string
 	}{
-		"no duplicates": {s1: "abc", s2: "def", want: "sss"},
+		"no duplicates": {s1: "abc", s2: "def", want: ""},
 	}
 	for name, tc := range testCases {
 		t.Parallel()
 		t.Run(name, func(t *testing.T) {
 			got := tokenizer.FindDuplicateChars(tc.s1, tc.s2)
 			if got != tc.want {
-				t.Fatalf("want %s but got %s", tc.want, got)
+				t.Fatalf("got '%s' but want '%s'", tc.want, got)
 			}
 		})
 	}
