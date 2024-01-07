@@ -17,21 +17,28 @@ func main() {
 		mapping[string(char)] = i + 1
 	}
 
-	fmt.Println(mapping["A"])
-
-	fmt.Println("vim-go")
 	file, err := os.Open("rucksack.txt")
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer file.Close()
 	scanner := bufio.NewScanner(file)
+	var count int
 	for scanner.Scan() {
 		fmt.Println(scanner.Text())
-		left, reight := tokenizer.Half(scanner.Text())
+		left, right := tokenizer.Half(scanner.Text())
+		fmt.Printf("left: %s %s", left, right)
+		duplicates := tokenizer.FindDuplicateChars(left, right)
+		fmt.Println("dd:", duplicates)
 
-		fmt.Printf("left %s right %s\n", left, reight)
+		for _, char := range duplicates {
+			count += mapping[string(char)]
+		}
+
+		// fmt.Printf("left %s right %s\n", left, reight)
 	}
+
+	fmt.Println(count)
 	if err := scanner.Err(); err != nil {
 		log.Fatal(err)
 	}
