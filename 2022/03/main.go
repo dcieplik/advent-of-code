@@ -27,7 +27,7 @@ func main() {
 	for scanner.Scan() {
 		fmt.Println(scanner.Text())
 		left, right := tokenizer.Half(scanner.Text())
-		fmt.Printf("left: %s %s", left, right)
+		fmt.Printf("left: %s right: %s\n", left, right)
 		duplicates := tokenizer.FindDuplicateChars(left, right)
 		fmt.Println("dd:", duplicates)
 
@@ -35,7 +35,6 @@ func main() {
 			count += mapping[string(char)]
 		}
 
-		// fmt.Printf("left %s right %s\n", left, reight)
 	}
 
 	fmt.Println(count)

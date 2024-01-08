@@ -16,12 +16,18 @@ func FindDuplicateChars(s1, s2 string) string {
 		count[string(char)]++
 	}
 
+	duplicateChars := make(map[string]struct{})
+
 	var sb strings.Builder
 
 	for _, char := range s2 {
 		if _, ok := count[string(char)]; ok {
-			sb.WriteString(string(char))
+			duplicateChars[string(char)] = struct{}{}
 		}
+	}
+
+	for k := range duplicateChars {
+		sb.WriteString(string(k))
 	}
 	return sb.String()
 }
