@@ -5,7 +5,7 @@ import "strings"
 // Half returns the left and right half of a string.
 func Half(text string) (string, string) {
 	mid := len(text) / 2
-	return text[mid:], text[:mid]
+	return text[:mid], text[mid:]
 }
 
 // FindDuplicateChars returns a map of duplicate chars.

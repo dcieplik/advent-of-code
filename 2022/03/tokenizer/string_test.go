@@ -10,11 +10,20 @@ func TestHalf(t *testing.T) {
 	tests := map[string]struct {
 		s, r1, r2 string
 	}{
-		"ss": {s: "ssss", r1: "ss", r2: "ss"},
+		"same size string":  {s: "ssss", r1: "ss", r2: "ss"},
+		"different strings": {s: "ssaa", r1: "ss", r2: "aa"},
 	}
 
 	t.Parallel()
-
+	for name, test := range tests {
+		test := test
+		t.Run(name, func(t *testing.T) {
+			gotS1, gotS2 := tokenizer.Half(test.s)
+			if gotS1 != test.r1 && gotS2 != test.r2 {
+				t.Fatalf("got '%s' and '%s' but got '%s' and '%s'", gotS1, gotS2, test.r1, test.r2)
+			}
+		})
+	}
 }
 
 func TestFindDuplicateChars(t *testing.T) {
