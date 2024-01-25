@@ -2,24 +2,39 @@ local function i(value)
   print(vim.inspect(value))
 end
 
-print("hhhh")
-cur = vim.api.nvim_buf_get_name(0)
-print("current buffer" .. cur)
+local getPath=function(str,sep)
+    sep=sep or'/'
+    return str:match("(.*"..sep..")")
+end
 
+local q = require"vim.treesitter" 
+local ts_utils = require"nvim-treesitter.ts_utils" 
 
-local language_tree = vim.treesitter.get_parser(0, "go")
-local q = require"vim.treesitter.query" 
+function get_current_function_name() 
+  local current_node = ts_utils.get_node_at_cursor() 
+  if not current_node then return "" end
+  
+  local expr = current_node
 
-local syntax_tree = language_tree:parse()
+  while expr do
+    parent = expr:parent()
+    if expr:type() == 'function_declaration' and parent:type() == "source_file" then
+        break
+    end
+    expr = expr:parent()
+  end
 
-local root = syntax_tree[1]:root()
+  if not expr then return "" end
 
+  return (ts_utils.get_node_text(expr:child(1)))[1]
+end
 
-local query = vim.treesitter.parse_query('go', [[
-(function_declaration 
-  name: (identifier) @test) 
-]])
-
-for _, captures, metadata in query:iter_matches(root, 0) do 
-  i(q.get_node_text(captures[1], 0))
+function exec() 
+  local name = get_current_function_name()
+  local cur = vim.api.nvim_buf_get_name(0)
+  local path = getPath(cur)
+  local handle = io.popen("cd " .. path .. "; go test -run " .. name .. " -v")
+  local result = handle:read("*a")
+  handle:close()
+  print(result)
 end
