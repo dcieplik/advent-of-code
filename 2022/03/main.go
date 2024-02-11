@@ -9,31 +9,18 @@ import (
 	"github.com/dcieplik/advent-of-code/2022/03/tokenizer"
 )
 
-var mapping = make(map[string]int)
-
 func main() {
-
-	for i, char := range "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" {
-		mapping[string(char)] = i + 1
-	}
-
 	file, err := os.Open("rucksack.txt")
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer file.Close()
 	scanner := bufio.NewScanner(file)
-	var count int
-	for scanner.Scan() {
-		fmt.Println(scanner.Text())
-		left, right := tokenizer.Half(scanner.Text())
-		fmt.Printf("left: %s right: %s\n", left, right)
-		duplicates := tokenizer.FindDuplicateChars(left, right)
-		fmt.Println("dd:", duplicates)
 
-		for _, char := range duplicates {
-			count += mapping[string(char)]
-		}
+	var count int
+
+	for scanner.Scan() {
+		count += tokenizer.Calculate(scanner.Text())
 
 	}
 

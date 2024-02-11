@@ -1,6 +1,31 @@
 package tokenizer
 
-import "strings"
+import (
+	"strings"
+)
+
+var mapping = make(map[string]int)
+
+func init() {
+	for i, char := range "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" {
+		mapping[string(char)] = i + 1
+	}
+}
+
+func Calculate(lines ...string) int {
+	var count int
+
+	for _, v := range lines {
+		left, right := Half(v)
+		duplicates := FindDuplicateChars(left, right)
+
+		for _, char := range duplicates {
+			count += mapping[string(char)]
+		}
+	}
+	return count
+
+}
 
 // Half returns the left and right half of a string.
 func Half(text string) (string, string) {
